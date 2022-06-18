@@ -1,15 +1,19 @@
 import { Grid, TextField } from "@mui/material";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
 import julio from "../../images/avatars/image-juliusomo.png";
 import { SendButton, StyledReplyCard } from "./reply-card.styles";
 
-const Reply = ({ user, addHandler, sendReply, currentUser, replyToggler }) => {
+const Reply = ({ user, addHandler, sendReply, replyToggler }) => {
   const [textField, setTextField] = useState("");
 
   const textFieldHandler = (e) => {
     const searchFieldString = e.target.value;
     setTextField(searchFieldString);
   };
+
+  const { currentUser } = useSelector(selectCurrentUser);
 
   return (
     <StyledReplyCard>
@@ -31,10 +35,13 @@ const Reply = ({ user, addHandler, sendReply, currentUser, replyToggler }) => {
           <SendButton
             aria-label="send"
             onClick={() => {
-              addHandler(textField, user, currentUser);
-              setTextField("");
               if (sendReply === "Reply") {
+                addHandler(textField, user, currentUser);
+                setTextField("");
                 replyToggler();
+              } else {
+                addHandler(textField, currentUser);
+                setTextField("");
               }
             }}
           >
@@ -56,10 +63,13 @@ const Reply = ({ user, addHandler, sendReply, currentUser, replyToggler }) => {
             <SendButton
               aria-label="send"
               onClick={() => {
-                addHandler(textField, user, currentUser);
-                setTextField("");
                 if (sendReply === "Reply") {
+                  addHandler(textField, user, currentUser);
+                  setTextField("");
                   replyToggler();
+                } else {
+                  addHandler(textField, currentUser);
+                  setTextField("");
                 }
               }}
             >

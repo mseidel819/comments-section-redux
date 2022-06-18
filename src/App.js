@@ -11,7 +11,6 @@ import { selectCurrentUser } from "./store/currentUser/currentUser.selector";
 
 function App() {
   const dispatch = useDispatch();
-  // const [currentUser, setCurrentUser] = useState({});
   const [comments, setComments] = useState([]);
   const [commentId, setCommentId] = useState(5);
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,13 +24,9 @@ function App() {
   };
 
   useEffect(() => {
-    // setCurrentUser(JobData.currentUser);
     dispatch(setCurrentUser(JobData.currentUser));
     setComments(JobData.comments);
   }, []);
-
-  const currentUser = useSelector(selectCurrentUser);
-  console.log(currentUser);
 
   ///////
   const increaseScore = (commentId) => {
@@ -205,7 +200,7 @@ function App() {
     ]);
   };
   /////////////////
-  const editReplyHandler = (content, user, currentUser) => {
+  const editReplyHandler = (content, user) => {
     const newComment = {
       ...user,
       content: content,
@@ -242,7 +237,7 @@ function App() {
             <div key={user.id}>
               <CommentCard
                 // removeCommentHandler={removeCommentHandler}
-                currentUser={currentUser}
+                // currentUser={currentUser}
                 user={user}
                 increaseScore={increaseScore}
                 decreaseScore={decreaseScore}
@@ -271,7 +266,7 @@ function App() {
                       .map((reply) => (
                         <CommentCard
                           // removeCommentHandler={removeReplyHandler}
-                          currentUser={currentUser}
+                          // currentUser={currentUser}
                           user={reply}
                           increaseScore={increaseScoreReply}
                           decreaseScore={decreaseScoreReply}
@@ -290,25 +285,10 @@ function App() {
           ))}
 
         <Reply
-          user={currentUser}
+          // user={currentUser}
           addHandler={addCommentHandler}
           sendReply="Send"
         />
-        {/* <footer>
-          Challenge by &nbsp;
-          <a
-            href="https://www.frontendmentor.io?ref=challenge"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Frontend Mentor
-          </a>
-          . Coded by &nbsp;
-          <a href="https://seidelmatt.com/" target="_blank" rel="noreferrer">
-            Matt Seidel
-          </a>
-          .
-        </footer> */}
       </Container>
       <Modal
         open={modalOpen}

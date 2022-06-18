@@ -1,6 +1,8 @@
 import { Grid, TextField } from "@mui/material";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { ReactComponent as ReplyIcon } from "../../images/icon-reply.svg";
+import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
 
 import { ReactComponent as EditIcon } from "../../images/icon-edit.svg";
 import { ReactComponent as Delete } from "../../images/icon-delete.svg";
@@ -26,7 +28,7 @@ import {
 
 const CommentCard = ({
   user,
-  currentUser,
+  // currentUser,
   // removeCommentHandler,
   increaseScore,
   decreaseScore,
@@ -39,6 +41,8 @@ const CommentCard = ({
   const [replyActive, setReplyActive] = useState(false);
   const [editActive, setEditActive] = useState(false);
   const [editField, setEditField] = useState(user.content);
+
+  const { currentUser } = useSelector(selectCurrentUser);
 
   const editFieldHandler = (e) => {
     const searchFieldString = e.target.value;

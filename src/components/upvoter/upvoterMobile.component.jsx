@@ -1,4 +1,6 @@
 import { Grid } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
 
 import {
   UpvoteGrid,
@@ -17,12 +19,14 @@ const UpvoterMobile = ({
   user,
   increaseScore,
   decreaseScore,
-  currentUser,
+  // currentUser,
   // removeCommentHandler,
   modalToggler,
   replyToggler,
   editToggler,
 }) => {
+  const { currentUser } = useSelector(selectCurrentUser);
+
   return (
     <UpvoteGrid
       item
