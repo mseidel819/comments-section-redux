@@ -1,12 +1,10 @@
 import { createSelector } from "reselect";
 
-// export const selectComments = (state) => state.comments;
-
 const selectCommentsReducer = (state) => state.comments;
 
 export const selectCommentId = createSelector(
   [selectCommentsReducer],
-  (comments) => comments.commentId
+  (comments) => comments.commentsId
 );
 
 export const selectComments = createSelector(

@@ -4,15 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { ReactComponent as ReplyIcon } from "../../images/icon-reply.svg";
 import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
 import {
-  addOneToId,
-  scoreIncreased,
-  scoreDecreased,
-  scoreIncreasedReply,
-  scoreDecreasedReply,
-  addToComments,
-  addToReply,
-  commentRemoved,
-  replyRemoved,
   commentEdited,
   replyEdited,
 } from "../../store/comments/comments.action";
@@ -37,22 +28,15 @@ import {
   SendButton,
   StyledTagSpan,
 } from "./comment-card.styles";
+import { selectComments } from "../../store/comments/comments.selector";
 
-const CommentCard = ({
-  user,
-  // currentUser,
-  // removeCommentHandler,
-  // addReplyHandler,
-  // editCommentHandler,
-  // editReplyHandler,
-  mainOrSub,
-  modalToggler,
-}) => {
+const CommentCard = ({ user, mainOrSub, modalToggler }) => {
   const [replyActive, setReplyActive] = useState(false);
   const [editActive, setEditActive] = useState(false);
   const [editField, setEditField] = useState(user.content);
 
   const { currentUser } = useSelector(selectCurrentUser);
+  const comments = useSelector(selectComments);
   const dispatch = useDispatch();
 
   const editFieldHandler = (e) => {
@@ -71,9 +55,10 @@ const CommentCard = ({
     ramsesmiron: ramsesmiron,
   };
 
-  const editCommentHandler = () => dispatch(commentEdited(editField, user));
+  const editCommentHandler = () =>
+    dispatch(commentEdited(comments, editField, user));
   const editReplyHandler = () =>
-    dispatch(replyEdited(editField, user, currentUser));
+    dispatch(replyEdited(comments, editField, user, currentUser));
 
   return (
     <Grid container>
@@ -186,12 +171,7 @@ const CommentCard = ({
       </Grid>
       {replyActive && (
         <Grid item xs={12} sx={{ marginBottom: "20px" }}>
-          <Reply
-            currentUser={currentUser}
-            user={user}
-            sendReply="Reply"
-            replyToggler={replyToggler}
-          />
+          <Reply user={user} sendReply="Reply" replyToggler={replyToggler} />
         </Grid>
       )}
     </Grid>

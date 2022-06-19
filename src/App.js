@@ -1,7 +1,7 @@
 import JobData from "./data.json";
 import { ModalBox, ModalCancelButton, ModalDeleteButton } from "./App.styles";
 import { Container, Grid, Modal } from "@mui/material";
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import Reply from "./components/reply-card/reply-card.component";
@@ -12,10 +12,12 @@ import { commentRemoved, replyRemoved } from "./store/comments/comments.action";
 import { selectComments } from "./store/comments/comments.selector";
 import { setComments } from "./store/comments/comments.action";
 
+//////////////////////////////
+//fix persist. it rehydrates correctly, but on reload, the useEfect calls and takes info from data.json.
+/////////////////////////////
 function App() {
   const dispatch = useDispatch();
-  // const [comments, setComments] = useState([]);
-  // const [commentId, setCommentId] = useState(5);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(undefined);
   const [replyTo, setReplyTo] = useState("");
@@ -29,7 +31,7 @@ function App() {
   useEffect(() => {
     dispatch(setCurrentUser(JobData.currentUser));
     dispatch(setComments(JobData.comments));
-  }, []);
+  }, [dispatch]);
 
   const comments = useSelector(selectComments);
 
@@ -51,13 +53,7 @@ function App() {
             .map((user) => (
               <div key={user.id}>
                 <CommentCard
-                  // removeCommentHandler={removeCommentHandler}
-                  // currentUser={currentUser}
                   user={user}
-                  // addCommentHandler={addCommentHandler}
-                  // addReplyHandler={addReplyHandler}
-                  // editCommentHandler={editCommentHandler}
-                  // editReplyHandler={editReplyHandler}
                   mainOrSub="main"
                   modalToggler={modalToggler}
                 />
@@ -79,9 +75,6 @@ function App() {
                         .map((reply) => (
                           <CommentCard
                             user={reply}
-                            // addCommentHandler={addCommentHandler}
-                            // addReplyHandler={addReplyHandler}
-                            // editReplyHandler={editReplyHandler}
                             modalToggler={modalToggler}
                             mainOrSub="sub"
                             key={`reply${reply.id}`}
@@ -93,10 +86,7 @@ function App() {
               </div>
             ))}
 
-        <Reply
-          // addHandler={addCommentHandler}
-          sendReply="Send"
-        />
+        <Reply sendReply="Send" />
       </Container>
       <Modal
         open={modalOpen}

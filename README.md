@@ -46,6 +46,9 @@ Users should be able to:
 - [React](https://reactjs.org/) - JS library
 - Redux
 - React-Redux
+- Redux-logger
+- Redux-persist
+- Reslect
 
 ## Author
 

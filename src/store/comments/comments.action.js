@@ -1,15 +1,13 @@
 import { COMMENTS_ACTION_TYPES } from "./comments.types";
 import { createAction } from "../../utils/reducer.utils";
 
-///setup here. need to move [commentId] hook to this store
-
 //////////////////////////////////////////////////////////////////////////////////
-const addCommentIdSetter = (comments, commentId) => {
+const addCommentIdSetter = (commentId) => {
   const added = commentId + 1;
   return added;
 };
-export const addOneToId = (comments, commentId) => {
-  const added = addCommentIdSetter(comments, commentId);
+export const addOneToId = (commentId) => {
+  const added = addCommentIdSetter(commentId);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS_ID, added);
 };
 //////////////////////////////////////////////////////////////////////////////////
@@ -112,11 +110,9 @@ const addComment = (comments, commentId, content, user) => {
   };
 
   return [...comments, newComment];
-  // setCommentId(commentId + 1);
-  /////here commentid
 };
-export const addToComments = (content, user) => {
-  const newComment = addComment(content, user);
+export const addToComments = (comments, commentId, content, user) => {
+  const newComment = addComment(comments, commentId, content, user);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newComment);
 };
 //////////////////////////////////////////////////////////////////////////////////
@@ -144,9 +140,6 @@ const addReply = (comments, commentId, content, user, currentUser) => {
       ...comments.filter((comment) => comment.id !== targetComment.id),
       targetComment,
     ];
-
-    // setCommentId(commentId + 1);
-    //here commentid
   }
   ///add function for if its already a reply. if !targetComment.replies
   if (user.replyingTo) {
@@ -163,14 +156,11 @@ const addReply = (comments, commentId, content, user, currentUser) => {
       ...comments.filter((comment) => comment.id !== targetComment.id),
       targetComment,
     ];
-
-    // setCommentId(commentId + 1);
-    //do i need this?
   }
 };
 
-export const addToReply = (content, user, currentUser) => {
-  const newComment = addReply(content, user, currentUser);
+export const addToReply = (comments, commentId, content, user, currentUser) => {
+  const newComment = addReply(comments, commentId, content, user, currentUser);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newComment);
 };
 //////////////////////////////////////////////////////////////////////////////////
@@ -223,8 +213,8 @@ const editComment = (comments, content, user) => {
   ];
 };
 
-export const commentEdited = (content, user) => {
-  const edit = editComment(content, user);
+export const commentEdited = (comments, content, user) => {
+  const edit = editComment(comments, content, user);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, edit);
 };
 //////////////////////////////////////////////////////////////////////////////////
@@ -252,13 +242,11 @@ const editReply = (comments, content, user) => {
   ];
 };
 
-export const replyEdited = (content, user) => {
-  const edit = editReply(content, user);
+export const replyEdited = (comments, content, user) => {
+  const edit = editReply(comments, content, user);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, edit);
 };
 //////////////////////////////////////////////////////////////////////////////////
 export const setComments = (comments) =>
   createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, comments);
-
-//////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////

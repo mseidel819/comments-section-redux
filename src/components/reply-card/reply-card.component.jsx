@@ -1,11 +1,22 @@
 import { Grid, TextField } from "@mui/material";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addToComments,
+  addToReply,
+  addOneToId,
+} from "../../store/comments/comments.action";
 import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
+import {
+  selectCommentId,
+  selectComments,
+} from "../../store/comments/comments.selector";
+
 import julio from "../../images/avatars/image-juliusomo.png";
 import { SendButton, StyledReplyCard } from "./reply-card.styles";
 
-const Reply = ({ user, addHandler, sendReply, replyToggler }) => {
+///////////////////////////////////////////////////////////////////////////////////////
+const Reply = ({ user, sendReply, replyToggler }) => {
   const [textField, setTextField] = useState("");
 
   const textFieldHandler = (e) => {
@@ -13,7 +24,17 @@ const Reply = ({ user, addHandler, sendReply, replyToggler }) => {
     setTextField(searchFieldString);
   };
 
+  const dispatch = useDispatch();
   const { currentUser } = useSelector(selectCurrentUser);
+  const comments = useSelector(selectComments);
+  const commentId = useSelector(selectCommentId);
+
+  const addIdHandler = () => dispatch(addOneToId(commentId));
+  const addCommentHandler = () =>
+    dispatch(addToComments(comments, commentId, textField, currentUser));
+
+  const addReplyHandler = () =>
+    dispatch(addToReply(comments, commentId, textField, user, currentUser));
 
   return (
     <StyledReplyCard>
@@ -36,13 +57,13 @@ const Reply = ({ user, addHandler, sendReply, replyToggler }) => {
             aria-label="send"
             onClick={() => {
               if (sendReply === "Reply") {
-                addHandler(textField, user, currentUser);
-                setTextField("");
+                addReplyHandler();
                 replyToggler();
               } else {
-                addHandler(textField, currentUser);
-                setTextField("");
+                addCommentHandler();
               }
+              addIdHandler();
+              setTextField("");
             }}
           >
             {sendReply}
@@ -64,11 +85,13 @@ const Reply = ({ user, addHandler, sendReply, replyToggler }) => {
               aria-label="send"
               onClick={() => {
                 if (sendReply === "Reply") {
-                  addHandler(textField, user, currentUser);
+                  addReplyHandler();
+                  addIdHandler();
                   setTextField("");
                   replyToggler();
                 } else {
-                  addHandler(textField, currentUser);
+                  addCommentHandler();
+                  addIdHandler();
                   setTextField("");
                 }
               }}
