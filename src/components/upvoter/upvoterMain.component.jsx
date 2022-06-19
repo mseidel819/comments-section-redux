@@ -1,5 +1,4 @@
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   scoreIncreased,
   scoreDecreased,
@@ -7,7 +6,6 @@ import {
   scoreDecreasedReply,
 } from "../../store/comments/comments.action";
 import { selectComments } from "../../store/comments/comments.selector";
-
 import { UpvoteGrid, UpvoteCard, StyledIconButton } from "./upvoterMain.styles";
 import { ReactComponent as Plus } from "../../images/icon-plus.svg";
 import { ReactComponent as Minus } from "../../images/icon-minus.svg";

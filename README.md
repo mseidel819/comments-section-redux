@@ -29,13 +29,13 @@ Users should be able to:
 
 ### Screenshot
 
-<!-- ![](./screenshot1.png) -->
-<!-- ![](./screenshot2.png) -->
-<!-- ![](./screenshot3.png) -->
+![](./screenshot1.png)
+![](./screenshot2.png)
+![](./screenshot3.png)
 
 ### Links
 
-<!-- - Solution URL: [GitHub](https://github.com/mseidel819/comments-section) -->
+- Solution URL: [GitHub](https://github.com/mseidel819/comments-section-redux)
 <!-- - Live Site URL: [Netlify](https://your-live-site-url.com) -->
 
 ## My process

@@ -12,9 +12,6 @@ import { commentRemoved, replyRemoved } from "./store/comments/comments.action";
 import { selectComments } from "./store/comments/comments.selector";
 import { setComments } from "./store/comments/comments.action";
 
-//////////////////////////////
-//fix persist. it rehydrates correctly, but on reload, the useEfect calls and takes info from data.json.
-/////////////////////////////
 function App() {
   const dispatch = useDispatch();
 
@@ -27,13 +24,14 @@ function App() {
     setDeleteId(id);
     setReplyTo(replyingTo);
   };
+  const comments = useSelector(selectComments);
 
   useEffect(() => {
     dispatch(setCurrentUser(JobData.currentUser));
-    dispatch(setComments(JobData.comments));
-  }, [dispatch]);
-
-  const comments = useSelector(selectComments);
+    if (!comments) {
+      dispatch(setComments(JobData.comments));
+    }
+  }, [dispatch, comments]);
 
   const removeReplyHandler = () => dispatch(replyRemoved(comments, deleteId));
   const removeCommentHandler = () =>

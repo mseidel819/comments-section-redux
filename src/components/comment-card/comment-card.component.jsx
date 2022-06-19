@@ -1,12 +1,13 @@
 import { Grid, TextField } from "@mui/material";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ReactComponent as ReplyIcon } from "../../images/icon-reply.svg";
 import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
 import {
   commentEdited,
   replyEdited,
 } from "../../store/comments/comments.action";
+
+import { ReactComponent as ReplyIcon } from "../../images/icon-reply.svg";
 import { ReactComponent as EditIcon } from "../../images/icon-edit.svg";
 import { ReactComponent as Delete } from "../../images/icon-delete.svg";
 import juliusomo from "../../images/avatars/image-juliusomo.png";
