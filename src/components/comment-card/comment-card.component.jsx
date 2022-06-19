@@ -84,6 +84,7 @@ const CommentCard = ({
           <Grid container columnSpacing={1}>
             <UpvoterMain
               user={user}
+              mainOrSub={mainOrSub}
               // increaseScore={increaseScoreHandler}
               // decreaseScore={decreaseScore}
             />
@@ -189,6 +190,7 @@ const CommentCard = ({
             <UpvoterMobile
               // removeCommentHandler={removeCommentHandler}
               user={user}
+              mainOrSub={mainOrSub}
               // increaseScore={increaseScoreHandler}
               // decreaseScore={decreaseScore}
               currentUser={currentUser}

@@ -33,10 +33,11 @@ function App() {
   }, []);
 
   const comments = useSelector(selectComments);
-  console.log(comments);
+  // console.log(comments);
 
-  const removeReplyHandler = () => dispatch(replyRemoved(deleteId));
-  const removeCommentHandler = () => dispatch(commentRemoved(deleteId));
+  const removeReplyHandler = () => dispatch(replyRemoved(comments, deleteId));
+  const removeCommentHandler = () =>
+    dispatch(commentRemoved(comments, deleteId));
 
   ///////////////////////////////////////////////
   /////JSX
@@ -44,58 +45,59 @@ function App() {
   return (
     <>
       <Container role="main" maxWidth="md" sx={{ marginTop: "64px" }}>
-        {comments
-          .sort((a, b) => {
-            return b.score - a.score;
-          })
-          .map((user) => (
-            <div key={user.id}>
-              <CommentCard
-                // removeCommentHandler={removeCommentHandler}
-                // currentUser={currentUser}
-                user={user}
-                // increaseScore={increaseScore}
-                // decreaseScore={decreaseScore}
-                // addCommentHandler={addCommentHandler}
-                // addReplyHandler={addReplyHandler}
-                // editCommentHandler={editCommentHandler}
-                // editReplyHandler={editReplyHandler}
-                mainOrSub="main"
-                modalToggler={modalToggler}
-              />
-              {user.replies.length ? (
-                <Grid container>
-                  <Grid
-                    item
-                    xs={1}
-                    sx={{
-                      borderLeft: "2px solid #E9EBF0",
-                      transform: "translate(50%, -10px)",
-                    }}
-                  ></Grid>
-                  <Grid item xs={11}>
-                    {user.replies
-                      .sort((a, b) => {
-                        return a.id - b.id;
-                      })
-                      .map((reply) => (
-                        <CommentCard
-                          user={reply}
-                          // increaseScore={increaseScoreReply}
-                          // decreaseScore={decreaseScoreReply}
-                          // addCommentHandler={addCommentHandler}
-                          // addReplyHandler={addReplyHandler}
-                          // editReplyHandler={editReplyHandler}
-                          modalToggler={modalToggler}
-                          mainOrSub="sub"
-                          key={`reply${reply.id}`}
-                        />
-                      ))}
+        {comments &&
+          comments
+            .sort((a, b) => {
+              return b.score - a.score;
+            })
+            .map((user) => (
+              <div key={user.id}>
+                <CommentCard
+                  // removeCommentHandler={removeCommentHandler}
+                  // currentUser={currentUser}
+                  user={user}
+                  // increaseScore={increaseScore}
+                  // decreaseScore={decreaseScore}
+                  // addCommentHandler={addCommentHandler}
+                  // addReplyHandler={addReplyHandler}
+                  // editCommentHandler={editCommentHandler}
+                  // editReplyHandler={editReplyHandler}
+                  mainOrSub="main"
+                  modalToggler={modalToggler}
+                />
+                {user.replies.length ? (
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={1}
+                      sx={{
+                        borderLeft: "2px solid #E9EBF0",
+                        transform: "translate(50%, -10px)",
+                      }}
+                    ></Grid>
+                    <Grid item xs={11}>
+                      {user.replies
+                        .sort((a, b) => {
+                          return a.id - b.id;
+                        })
+                        .map((reply) => (
+                          <CommentCard
+                            user={reply}
+                            // increaseScore={increaseScoreReply}
+                            // decreaseScore={decreaseScoreReply}
+                            // addCommentHandler={addCommentHandler}
+                            // addReplyHandler={addReplyHandler}
+                            // editReplyHandler={editReplyHandler}
+                            modalToggler={modalToggler}
+                            mainOrSub="sub"
+                            key={`reply${reply.id}`}
+                          />
+                        ))}
+                    </Grid>
                   </Grid>
-                </Grid>
-              ) : null}
-            </div>
-          ))}
+                ) : null}
+              </div>
+            ))}
 
         <Reply
           // addHandler={addCommentHandler}
@@ -127,9 +129,7 @@ function App() {
               <ModalDeleteButton
                 aria-label="delete"
                 onClick={() => {
-                  replyTo
-                    ? removeReplyHandler(deleteId)
-                    : removeCommentHandler(deleteId);
+                  replyTo ? removeReplyHandler() : removeCommentHandler();
                   modalToggler();
                 }}
               >

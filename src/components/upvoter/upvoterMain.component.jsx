@@ -1,8 +1,36 @@
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import {
+  scoreIncreased,
+  scoreDecreased,
+  scoreIncreasedReply,
+  scoreDecreasedReply,
+} from "../../store/comments/comments.action";
+import { selectComments } from "../../store/comments/comments.selector";
+
 import { UpvoteGrid, UpvoteCard, StyledIconButton } from "./upvoterMain.styles";
 import { ReactComponent as Plus } from "../../images/icon-plus.svg";
 import { ReactComponent as Minus } from "../../images/icon-minus.svg";
 
-const UpvoterMain = ({ user, increaseScore, decreaseScore }) => {
+const UpvoterMain = ({
+  user,
+  mainOrSub,
+  //  increaseScore,
+  // decreaseScore
+}) => {
+  const dispatch = useDispatch();
+
+  const comments = useSelector(selectComments);
+
+  const increaseScoreHandler = () =>
+    dispatch(scoreIncreased(comments, user.id));
+  const decreaseScoreHandler = () =>
+    dispatch(scoreDecreased(comments, user.id));
+  const increaseScoreReplyHandler = () =>
+    dispatch(scoreIncreasedReply(comments, user.id));
+  const decreaseScoreReplyHandler = () =>
+    dispatch(scoreDecreasedReply(comments, user.id));
+
   return (
     <UpvoteGrid
       item
@@ -11,11 +39,25 @@ const UpvoterMain = ({ user, increaseScore, decreaseScore }) => {
       sx={{ display: { xs: "none", sm: "block" } }}
     >
       <UpvoteCard>
-        <StyledIconButton onClick={() => increaseScore(user.id)} size="large">
+        <StyledIconButton
+          onClick={
+            mainOrSub === "main"
+              ? increaseScoreHandler
+              : increaseScoreReplyHandler
+          }
+          size="large"
+        >
           <Plus />
         </StyledIconButton>
         <h3>{user.score}</h3>
-        <StyledIconButton onClick={() => decreaseScore(user.id)} size="large">
+        <StyledIconButton
+          onClick={
+            mainOrSub === "main"
+              ? decreaseScoreHandler
+              : decreaseScoreReplyHandler
+          }
+          size="large"
+        >
           <Minus />
         </StyledIconButton>
       </UpvoteCard>

@@ -8,8 +8,8 @@ const addCommentIdSetter = (comments, commentId) => {
   const added = commentId + 1;
   return added;
 };
-export const addOneToId = (commentId) => {
-  const added = addCommentIdSetter(commentId);
+export const addOneToId = (comments, commentId) => {
+  const added = addCommentIdSetter(comments, commentId);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS_ID, added);
 };
 //////////////////////////////////////////////////////////////////////////////////
@@ -22,8 +22,8 @@ const increaseScore = (comments, commentId) => {
   return newComments;
 };
 
-export const scoreIncreased = (commentId) => {
-  const newScore = increaseScore(commentId);
+export const scoreIncreased = (comments, commentId) => {
+  const newScore = increaseScore(comments, commentId);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newScore);
 };
 //////////////////////////////////////////////////////////////////////////////////
@@ -37,8 +37,8 @@ const decreaseScore = (comments, commentId) => {
   return newComments;
 };
 
-export const scoreDecreased = (commentId) => {
-  const newScore = decreaseScore(commentId);
+export const scoreDecreased = (comments, commentId) => {
+  const newScore = decreaseScore(comments, commentId);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newScore);
 };
 
@@ -64,8 +64,8 @@ const increaseScoreReply = (comments, replyId) => {
   ];
 };
 
-export const scoreIncreasedReply = (commentId) => {
-  const newScore = increaseScore(commentId);
+export const scoreIncreasedReply = (comments, commentId) => {
+  const newScore = increaseScoreReply(comments, commentId);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newScore);
 };
 //////////////////////////////////////////////////////////////////////////////////
@@ -89,8 +89,8 @@ const decreaseScoreReply = (comments, replyId) => {
   ];
 };
 
-export const scoreDecreasedReply = (commentId) => {
-  const newScore = decreaseScore(commentId);
+export const scoreDecreasedReply = (comments, commentId) => {
+  const newScore = decreaseScoreReply(comments, commentId);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newScore);
 };
 //////////////////////////////////////////////////////////////////////////////////
@@ -182,8 +182,8 @@ const removeComment = (comments, currentId) => {
   return filteredComments;
 };
 
-export const commentRemoved = (currentId) => {
-  const removed = removeComment(currentId);
+export const commentRemoved = (comments, currentId) => {
+  const removed = removeComment(comments, currentId);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, removed);
 };
 
@@ -204,8 +204,8 @@ const removeReply = (comments, replyId) => {
   ];
 };
 
-export const replyRemoved = (replyId) => {
-  const removed = removeReply(replyId);
+export const replyRemoved = (comments, replyId) => {
+  const removed = removeReply(comments, replyId);
   return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, removed);
 };
 //////////////////////////////////////////////////////////////////////////////////
