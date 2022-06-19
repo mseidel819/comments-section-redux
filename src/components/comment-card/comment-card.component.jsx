@@ -1,9 +1,21 @@
 import { Grid, TextField } from "@mui/material";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ReactComponent as ReplyIcon } from "../../images/icon-reply.svg";
 import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
-
+import {
+  addOneToId,
+  scoreIncreased,
+  scoreDecreased,
+  scoreIncreasedReply,
+  scoreDecreasedReply,
+  addToComments,
+  addToReply,
+  commentRemoved,
+  replyRemoved,
+  commentEdited,
+  replyEdited,
+} from "../../store/comments/comments.action";
 import { ReactComponent as EditIcon } from "../../images/icon-edit.svg";
 import { ReactComponent as Delete } from "../../images/icon-delete.svg";
 import juliusomo from "../../images/avatars/image-juliusomo.png";
@@ -30,11 +42,11 @@ const CommentCard = ({
   user,
   // currentUser,
   // removeCommentHandler,
-  increaseScore,
-  decreaseScore,
-  addReplyHandler,
-  editCommentHandler,
-  editReplyHandler,
+  // increaseScore,
+  // decreaseScore,
+  // addReplyHandler,
+  // editCommentHandler,
+  // editReplyHandler,
   mainOrSub,
   modalToggler,
 }) => {
@@ -43,6 +55,7 @@ const CommentCard = ({
   const [editField, setEditField] = useState(user.content);
 
   const { currentUser } = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
 
   const editFieldHandler = (e) => {
     const searchFieldString = e.target.value;
@@ -60,6 +73,10 @@ const CommentCard = ({
     ramsesmiron: ramsesmiron,
   };
 
+  const editCommentHandler = () => dispatch(commentEdited(editField, user));
+  const editReplyHandler = () =>
+    dispatch(replyEdited(editField, user, currentUser));
+
   return (
     <Grid container>
       <Grid item>
@@ -67,8 +84,8 @@ const CommentCard = ({
           <Grid container columnSpacing={1}>
             <UpvoterMain
               user={user}
-              increaseScore={increaseScore}
-              decreaseScore={decreaseScore}
+              // increaseScore={increaseScoreHandler}
+              // decreaseScore={decreaseScore}
             />
 
             <Grid item container sm={11}>
@@ -146,11 +163,11 @@ const CommentCard = ({
                     aria-label="update"
                     onClick={() => {
                       if (mainOrSub === "main") {
-                        editCommentHandler(editField, user);
+                        editCommentHandler();
                         editToggler();
                       }
                       if (mainOrSub === "sub") {
-                        editReplyHandler(editField, user, currentUser);
+                        editReplyHandler();
                         editToggler();
                       }
                     }}
@@ -172,8 +189,8 @@ const CommentCard = ({
             <UpvoterMobile
               // removeCommentHandler={removeCommentHandler}
               user={user}
-              increaseScore={increaseScore}
-              decreaseScore={decreaseScore}
+              // increaseScore={increaseScoreHandler}
+              // decreaseScore={decreaseScore}
               currentUser={currentUser}
               replyToggler={replyToggler}
               editToggler={editToggler}
@@ -187,7 +204,7 @@ const CommentCard = ({
           <Reply
             currentUser={currentUser}
             user={user}
-            addHandler={addReplyHandler}
+            // addHandler={addReplyHandler}
             sendReply="Reply"
             replyToggler={replyToggler}
           />

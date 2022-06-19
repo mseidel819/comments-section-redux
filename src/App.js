@@ -7,12 +7,15 @@ import { useSelector } from "react-redux";
 import Reply from "./components/reply-card/reply-card.component";
 import CommentCard from "./components/comment-card/comment-card.component";
 import { setCurrentUser } from "./store/currentUser/currentUser.action";
-import { selectCurrentUser } from "./store/currentUser/currentUser.selector";
+import { commentRemoved, replyRemoved } from "./store/comments/comments.action";
+// import { selectCurrentUser } from "./store/currentUser/currentUser.selector";
+import { selectComments } from "./store/comments/comments.selector";
+import { setComments } from "./store/comments/comments.action";
 
 function App() {
   const dispatch = useDispatch();
-  const [comments, setComments] = useState([]);
-  const [commentId, setCommentId] = useState(5);
+  // const [comments, setComments] = useState([]);
+  // const [commentId, setCommentId] = useState(5);
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(undefined);
   const [replyTo, setReplyTo] = useState("");
@@ -25,204 +28,16 @@ function App() {
 
   useEffect(() => {
     dispatch(setCurrentUser(JobData.currentUser));
-    setComments(JobData.comments);
+    dispatch(setComments(JobData.comments));
+    // setComments(JobData.comments);
   }, []);
 
-  ///////
-  const increaseScore = (commentId) => {
-    const newComments = comments.map((comment) => {
-      return comment.id === commentId
-        ? { ...comment, score: comment.score + 1 }
-        : comment;
-    });
-    setComments(newComments);
-  };
+  const comments = useSelector(selectComments);
+  console.log(comments);
 
-  ////////
-  const decreaseScore = (commentId) => {
-    const newComments = comments.map((comment) => {
-      return comment.id === commentId
-        ? { ...comment, score: comment.score - 1 }
-        : comment;
-    });
+  const removeReplyHandler = () => dispatch(replyRemoved(deleteId));
+  const removeCommentHandler = () => dispatch(commentRemoved(deleteId));
 
-    setComments(newComments);
-  };
-
-  /////////
-  const increaseScoreReply = (replyId) => {
-    let targetComment = comments.find((comment) =>
-      comment.replies.find((reply) => reply.id === replyId)
-    );
-
-    targetComment = {
-      ...targetComment,
-      replies: targetComment.replies.map((comment) => {
-        return comment.id === replyId
-          ? { ...comment, score: comment.score + 1 }
-          : comment;
-      }),
-    };
-
-    setComments([
-      ...comments.filter((comment) => comment.id !== targetComment.id),
-      targetComment,
-    ]);
-  };
-
-  ////////////
-  const decreaseScoreReply = (replyId) => {
-    let targetComment = comments.find((comment) =>
-      comment.replies.find((reply) => reply.id === replyId)
-    );
-
-    targetComment = {
-      ...targetComment,
-      replies: targetComment.replies.map((comment) => {
-        return comment.id === replyId
-          ? { ...comment, score: comment.score - 1 }
-          : comment;
-      }),
-    };
-
-    setComments([
-      ...comments.filter((comment) => comment.id !== targetComment.id),
-      targetComment,
-    ]);
-  };
-
-  //////////
-  const addCommentHandler = (content, user) => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDay();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-
-    const newComment = {
-      content: content,
-      createdAt: `${month}/${day}/${year} at ${hour}:${minute}`,
-      id: commentId,
-      replies: [],
-      score: 0,
-      user: user,
-    };
-
-    setComments([...comments, newComment]);
-    setCommentId(commentId + 1);
-  };
-
-  //////////////
-  const addReplyHandler = (content, user, currentUser) => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDay();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-
-    const newComment = {
-      content: content,
-      createdAt: `${month}/${day}/${year} at ${hour}:${minute}`,
-      id: commentId,
-      replyingTo: user.user.username,
-      score: 0,
-      user: currentUser,
-    };
-
-    if (user.replies) {
-      const targetComment = comments.find((comment) => comment.id === user.id);
-      targetComment.replies.push(newComment);
-      setComments([
-        ...comments.filter((comment) => comment.id !== targetComment.id),
-        targetComment,
-      ]);
-
-      setCommentId(commentId + 1);
-    }
-
-    ///add function for if its already a reply. if !targetComment.replies
-    if (user.replyingTo) {
-      let targetComment = comments.find((comment) =>
-        comment.replies.find((reply) => reply.id === user.id)
-      );
-
-      targetComment = {
-        ...targetComment,
-        replies: [...targetComment.replies, newComment],
-      };
-
-      setComments([
-        ...comments.filter((comment) => comment.id !== targetComment.id),
-        targetComment,
-      ]);
-    }
-  };
-
-  ////////////
-  const removeCommentHandler = (currentId) => {
-    const filteredComments = comments.filter((comment) => {
-      return comment.id !== currentId;
-    });
-
-    setComments(filteredComments);
-  };
-
-  /////////////
-  const removeReplyHandler = (replyId) => {
-    let targetComment = comments.find((comment) =>
-      comment.replies.find((reply) => reply.id === replyId)
-    );
-
-    targetComment = {
-      ...targetComment,
-      replies: targetComment.replies.filter((reply) => reply.id !== replyId),
-    };
-
-    setComments([
-      ...comments.filter((comment) => comment.id !== targetComment.id),
-      targetComment,
-    ]);
-  };
-  /////////////////
-  const editCommentHandler = (content, user) => {
-    const newComment = {
-      ...user,
-      content: content,
-    };
-
-    const targetComment = comments.find((comment) => comment.id === user.id);
-
-    setComments([
-      ...comments.filter((comment) => comment.id !== targetComment.id),
-      newComment,
-    ]);
-  };
-  /////////////////
-  const editReplyHandler = (content, user) => {
-    const newComment = {
-      ...user,
-      content: content,
-    };
-
-    let targetComment = comments.find((comment) =>
-      comment.replies.find((reply) => reply.id === user.id)
-    );
-
-    targetComment = {
-      ...targetComment,
-      replies: [
-        ...targetComment.replies.filter((reply) => reply.id !== user.id),
-        newComment,
-      ],
-    };
-
-    setComments([
-      ...comments.filter((comment) => comment.id !== targetComment.id),
-      targetComment,
-    ]);
-  };
   ///////////////////////////////////////////////
   /////JSX
   ////////////////////////////////////////////////
@@ -239,12 +54,12 @@ function App() {
                 // removeCommentHandler={removeCommentHandler}
                 // currentUser={currentUser}
                 user={user}
-                increaseScore={increaseScore}
-                decreaseScore={decreaseScore}
-                addCommentHandler={addCommentHandler}
-                addReplyHandler={addReplyHandler}
-                editCommentHandler={editCommentHandler}
-                editReplyHandler={editReplyHandler}
+                // increaseScore={increaseScore}
+                // decreaseScore={decreaseScore}
+                // addCommentHandler={addCommentHandler}
+                // addReplyHandler={addReplyHandler}
+                // editCommentHandler={editCommentHandler}
+                // editReplyHandler={editReplyHandler}
                 mainOrSub="main"
                 modalToggler={modalToggler}
               />
@@ -265,14 +80,12 @@ function App() {
                       })
                       .map((reply) => (
                         <CommentCard
-                          // removeCommentHandler={removeReplyHandler}
-                          // currentUser={currentUser}
                           user={reply}
-                          increaseScore={increaseScoreReply}
-                          decreaseScore={decreaseScoreReply}
-                          addCommentHandler={addCommentHandler}
-                          addReplyHandler={addReplyHandler}
-                          editReplyHandler={editReplyHandler}
+                          // increaseScore={increaseScoreReply}
+                          // decreaseScore={decreaseScoreReply}
+                          // addCommentHandler={addCommentHandler}
+                          // addReplyHandler={addReplyHandler}
+                          // editReplyHandler={editReplyHandler}
                           modalToggler={modalToggler}
                           mainOrSub="sub"
                           key={`reply${reply.id}`}
@@ -285,8 +98,7 @@ function App() {
           ))}
 
         <Reply
-          // user={currentUser}
-          addHandler={addCommentHandler}
+          // addHandler={addCommentHandler}
           sendReply="Send"
         />
       </Container>

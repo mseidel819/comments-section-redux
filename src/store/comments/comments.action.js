@@ -3,7 +3,17 @@ import { createAction } from "../../utils/reducer.utils";
 
 ///setup here. need to move [commentId] hook to this store
 
-const increaseScore = (commentId) => {
+//////////////////////////////////////////////////////////////////////////////////
+const addCommentIdSetter = (comments, commentId) => {
+  const added = commentId + 1;
+  return added;
+};
+export const addOneToId = (commentId) => {
+  const added = addCommentIdSetter(commentId);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS_ID, added);
+};
+//////////////////////////////////////////////////////////////////////////////////
+const increaseScore = (comments, commentId) => {
   const newComments = comments.map((comment) => {
     return comment.id === commentId
       ? { ...comment, score: comment.score + 1 }
@@ -11,8 +21,13 @@ const increaseScore = (commentId) => {
   });
   return newComments;
 };
+
+export const scoreIncreased = (commentId) => {
+  const newScore = increaseScore(commentId);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newScore);
+};
 //////////////////////////////////////////////////////////////////////////////////
-const decreaseScore = (commentId) => {
+const decreaseScore = (comments, commentId) => {
   const newComments = comments.map((comment) => {
     return comment.id === commentId
       ? { ...comment, score: comment.score - 1 }
@@ -21,9 +36,15 @@ const decreaseScore = (commentId) => {
 
   return newComments;
 };
+
+export const scoreDecreased = (commentId) => {
+  const newScore = decreaseScore(commentId);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newScore);
+};
+
 //////////////////////////////////////////////////////////////////////////////////
 
-const increaseScoreReply = (replyId) => {
+const increaseScoreReply = (comments, replyId) => {
   let targetComment = comments.find((comment) =>
     comment.replies.find((reply) => reply.id === replyId)
   );
@@ -42,8 +63,13 @@ const increaseScoreReply = (replyId) => {
     targetComment,
   ];
 };
+
+export const scoreIncreasedReply = (commentId) => {
+  const newScore = increaseScore(commentId);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newScore);
+};
 //////////////////////////////////////////////////////////////////////////////////
-const decreaseScoreReply = (replyId) => {
+const decreaseScoreReply = (comments, replyId) => {
   let targetComment = comments.find((comment) =>
     comment.replies.find((reply) => reply.id === replyId)
   );
@@ -63,8 +89,12 @@ const decreaseScoreReply = (replyId) => {
   ];
 };
 
+export const scoreDecreasedReply = (commentId) => {
+  const newScore = decreaseScore(commentId);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newScore);
+};
 //////////////////////////////////////////////////////////////////////////////////
-const addCommentHandler = (content, user) => {
+const addComment = (comments, commentId, content, user) => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -82,11 +112,15 @@ const addCommentHandler = (content, user) => {
   };
 
   return [...comments, newComment];
-  setCommentId(commentId + 1);
+  // setCommentId(commentId + 1);
+  /////here commentid
 };
-
+export const addToComments = (content, user) => {
+  const newComment = addComment(content, user);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newComment);
+};
 //////////////////////////////////////////////////////////////////////////////////
-const addReplyHandler = (content, user, currentUser) => {
+const addReply = (comments, commentId, content, user, currentUser) => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -106,12 +140,13 @@ const addReplyHandler = (content, user, currentUser) => {
   if (user.replies) {
     const targetComment = comments.find((comment) => comment.id === user.id);
     targetComment.replies.push(newComment);
-    setComments([
+    return [
       ...comments.filter((comment) => comment.id !== targetComment.id),
       targetComment,
-    ]);
+    ];
 
-    setCommentId(commentId + 1);
+    // setCommentId(commentId + 1);
+    //here commentid
   }
   ///add function for if its already a reply. if !targetComment.replies
   if (user.replyingTo) {
@@ -124,24 +159,36 @@ const addReplyHandler = (content, user, currentUser) => {
       replies: [...targetComment.replies, newComment],
     };
 
-    setComments([
+    return [
       ...comments.filter((comment) => comment.id !== targetComment.id),
       targetComment,
-    ]);
+    ];
+
+    // setCommentId(commentId + 1);
+    //do i need this?
   }
 };
 
+export const addToReply = (content, user, currentUser) => {
+  const newComment = addReply(content, user, currentUser);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, newComment);
+};
 //////////////////////////////////////////////////////////////////////////////////
-const removeCommentHandler = (currentId) => {
+const removeComment = (comments, currentId) => {
   const filteredComments = comments.filter((comment) => {
     return comment.id !== currentId;
   });
 
-  setComments(filteredComments);
+  return filteredComments;
+};
+
+export const commentRemoved = (currentId) => {
+  const removed = removeComment(currentId);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, removed);
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-const removeReplyHandler = (replyId) => {
+const removeReply = (comments, replyId) => {
   let targetComment = comments.find((comment) =>
     comment.replies.find((reply) => reply.id === replyId)
   );
@@ -151,13 +198,18 @@ const removeReplyHandler = (replyId) => {
     replies: targetComment.replies.filter((reply) => reply.id !== replyId),
   };
 
-  setComments([
+  return [
     ...comments.filter((comment) => comment.id !== targetComment.id),
     targetComment,
-  ]);
+  ];
+};
+
+export const replyRemoved = (replyId) => {
+  const removed = removeReply(replyId);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, removed);
 };
 //////////////////////////////////////////////////////////////////////////////////
-const editCommentHandler = (content, user) => {
+const editComment = (comments, content, user) => {
   const newComment = {
     ...user,
     content: content,
@@ -170,8 +222,13 @@ const editCommentHandler = (content, user) => {
     newComment,
   ];
 };
+
+export const commentEdited = (content, user) => {
+  const edit = editComment(content, user);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, edit);
+};
 //////////////////////////////////////////////////////////////////////////////////
-const editReplyHandler = (content, user) => {
+const editReply = (comments, content, user) => {
   const newComment = {
     ...user,
     content: content,
@@ -194,62 +251,14 @@ const editReplyHandler = (content, user) => {
     targetComment,
   ];
 };
+
+export const replyEdited = (content, user) => {
+  const edit = editReply(content, user);
+  return createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, edit);
+};
+//////////////////////////////////////////////////////////////////////////////////
+export const setComments = (comments) =>
+  createAction(COMMENTS_ACTION_TYPES.SET_COMMENTS, comments);
+
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-
-// const addCartItem = (cartItems, productToAdd) => {
-//     const existingCartItem = cartItems.find(
-//       (cartItem) => cartItem.id === productToAdd.id
-//     );
-
-//     if (existingCartItem) {
-//       return cartItems.map((cartItem) =>
-//         cartItem.id === productToAdd.id
-//           ? { ...cartItem, quantity: cartItem.quantity + 1 }
-//           : cartItem
-//       );
-//     }
-
-//     return [...cartItems, { ...productToAdd, quantity: 1 }];
-//   };
-
-//   const removeCartItem = (cartItems, cartItemToRemove) => {
-//     // find the cart item to remove
-//     const existingCartItem = cartItems.find(
-//       (cartItem) => cartItem.id === cartItemToRemove.id
-//     );
-
-//     // check if quantity is equal to 1, if it is remove that item from the cart
-//     if (existingCartItem.quantity === 1) {
-//       return cartItems.filter((cartItem) => cartItem.id !== cartItemToRemove.id);
-//     }
-
-//     // return back cartitems with matching cart item with reduced quantity
-//     return cartItems.map((cartItem) =>
-//       cartItem.id === cartItemToRemove.id
-//         ? { ...cartItem, quantity: cartItem.quantity - 1 }
-//         : cartItem
-//     );
-//   };
-
-//   const clearCartItem = (cartItems, cartItemToClear) =>
-//     cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
-
-//   export const addItemToCart = (cartItems, productToAdd) => {
-//     const newCartItems = addCartItem(cartItems, productToAdd);
-//     return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-//   };
-
-//   export const removeItemFromCart = (cartItems, cartItemToRemove) => {
-//     const newCartItems = removeCartItem(cartItems, cartItemToRemove);
-//     return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-//   };
-
-//   export const clearItemFromCart = (cartItems, cartItemToClear) => {
-//     const newCartItems = clearCartItem(cartItems, cartItemToClear);
-//     return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-//   };
-
-//   export const setIsCartOpen = (boolean) =>
-//     createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, boolean);
