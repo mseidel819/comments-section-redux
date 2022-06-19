@@ -42,8 +42,6 @@ const CommentCard = ({
   user,
   // currentUser,
   // removeCommentHandler,
-  // increaseScore,
-  // decreaseScore,
   // addReplyHandler,
   // editCommentHandler,
   // editReplyHandler,
@@ -82,12 +80,7 @@ const CommentCard = ({
       <Grid item>
         <StyledCommentCard>
           <Grid container columnSpacing={1}>
-            <UpvoterMain
-              user={user}
-              mainOrSub={mainOrSub}
-              // increaseScore={increaseScoreHandler}
-              // decreaseScore={decreaseScore}
-            />
+            <UpvoterMain user={user} mainOrSub={mainOrSub} />
 
             <Grid item container sm={11}>
               <Grid item container justifyContent="space-between">
@@ -110,13 +103,6 @@ const CommentCard = ({
                   {user.user.username === currentUser.username ? (
                     <>
                       <Grid item sm={6}>
-                        {/* <DeleteButton
-                          onClick={() => removeCommentHandler(user.id)}
-                          variant="text"
-                          startIcon={<Delete />}
-                        >
-                          Delete
-                        </DeleteButton> */}
                         <DeleteButton
                           onClick={() => {
                             modalToggler(user.id, user.replyingTo);
@@ -188,11 +174,8 @@ const CommentCard = ({
               )}
             </Grid>
             <UpvoterMobile
-              // removeCommentHandler={removeCommentHandler}
               user={user}
               mainOrSub={mainOrSub}
-              // increaseScore={increaseScoreHandler}
-              // decreaseScore={decreaseScore}
               currentUser={currentUser}
               replyToggler={replyToggler}
               editToggler={editToggler}
@@ -206,7 +189,6 @@ const CommentCard = ({
           <Reply
             currentUser={currentUser}
             user={user}
-            // addHandler={addReplyHandler}
             sendReply="Reply"
             replyToggler={replyToggler}
           />

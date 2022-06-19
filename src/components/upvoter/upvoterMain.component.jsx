@@ -12,12 +12,7 @@ import { UpvoteGrid, UpvoteCard, StyledIconButton } from "./upvoterMain.styles";
 import { ReactComponent as Plus } from "../../images/icon-plus.svg";
 import { ReactComponent as Minus } from "../../images/icon-minus.svg";
 
-const UpvoterMain = ({
-  user,
-  mainOrSub,
-  //  increaseScore,
-  // decreaseScore
-}) => {
+const UpvoterMain = ({ user, mainOrSub }) => {
   const dispatch = useDispatch();
 
   const comments = useSelector(selectComments);

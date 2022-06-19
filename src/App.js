@@ -8,7 +8,7 @@ import Reply from "./components/reply-card/reply-card.component";
 import CommentCard from "./components/comment-card/comment-card.component";
 import { setCurrentUser } from "./store/currentUser/currentUser.action";
 import { commentRemoved, replyRemoved } from "./store/comments/comments.action";
-// import { selectCurrentUser } from "./store/currentUser/currentUser.selector";
+
 import { selectComments } from "./store/comments/comments.selector";
 import { setComments } from "./store/comments/comments.action";
 
@@ -29,11 +29,9 @@ function App() {
   useEffect(() => {
     dispatch(setCurrentUser(JobData.currentUser));
     dispatch(setComments(JobData.comments));
-    // setComments(JobData.comments);
   }, []);
 
   const comments = useSelector(selectComments);
-  // console.log(comments);
 
   const removeReplyHandler = () => dispatch(replyRemoved(comments, deleteId));
   const removeCommentHandler = () =>
@@ -56,8 +54,6 @@ function App() {
                   // removeCommentHandler={removeCommentHandler}
                   // currentUser={currentUser}
                   user={user}
-                  // increaseScore={increaseScore}
-                  // decreaseScore={decreaseScore}
                   // addCommentHandler={addCommentHandler}
                   // addReplyHandler={addReplyHandler}
                   // editCommentHandler={editCommentHandler}
@@ -83,8 +79,6 @@ function App() {
                         .map((reply) => (
                           <CommentCard
                             user={reply}
-                            // increaseScore={increaseScoreReply}
-                            // decreaseScore={decreaseScoreReply}
                             // addCommentHandler={addCommentHandler}
                             // addReplyHandler={addReplyHandler}
                             // editReplyHandler={editReplyHandler}

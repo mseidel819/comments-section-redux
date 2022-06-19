@@ -1,5 +1,14 @@
 import { Grid } from "@mui/material";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import {
+  scoreIncreased,
+  scoreDecreased,
+  scoreIncreasedReply,
+  scoreDecreasedReply,
+} from "../../store/comments/comments.action";
+import { selectComments } from "../../store/comments/comments.selector";
+
 import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
 
 import {
@@ -17,15 +26,24 @@ import { ReactComponent as EditIcon } from "../../images/icon-edit.svg";
 
 const UpvoterMobile = ({
   user,
-  increaseScore,
-  decreaseScore,
-  // currentUser,
-  // removeCommentHandler,
+  mainOrSub,
   modalToggler,
   replyToggler,
   editToggler,
 }) => {
+  const dispatch = useDispatch();
   const { currentUser } = useSelector(selectCurrentUser);
+
+  const comments = useSelector(selectComments);
+
+  const increaseScoreHandler = () =>
+    dispatch(scoreIncreased(comments, user.id));
+  const decreaseScoreHandler = () =>
+    dispatch(scoreDecreased(comments, user.id));
+  const increaseScoreReplyHandler = () =>
+    dispatch(scoreIncreasedReply(comments, user.id));
+  const decreaseScoreReplyHandler = () =>
+    dispatch(scoreDecreasedReply(comments, user.id));
 
   return (
     <UpvoteGrid
@@ -42,7 +60,11 @@ const UpvoterMobile = ({
             <Grid item xs={4}>
               <StyledIconButton
                 aria-label="upvote"
-                onClick={() => increaseScore(user.id)}
+                onClick={
+                  mainOrSub === "main"
+                    ? increaseScoreHandler
+                    : increaseScoreReplyHandler
+                }
                 size="large"
               >
                 <Plus />
@@ -54,7 +76,11 @@ const UpvoterMobile = ({
             <Grid item xs={4}>
               <StyledIconButton
                 aria-label="downvote"
-                onClick={() => decreaseScore(user.id)}
+                onClick={
+                  mainOrSub === "main"
+                    ? decreaseScoreHandler
+                    : decreaseScoreReplyHandler
+                }
                 size="large"
               >
                 <Minus />
@@ -67,13 +93,6 @@ const UpvoterMobile = ({
         {user.user.username === currentUser.username ? (
           <>
             <Grid item container xs={6} justifyContent="flex-end">
-              {/* <DeleteButton
-                onClick={() => removeCommentHandler(user.id)}
-                variant="text"
-                startIcon={<Delete />}
-              >
-                Delete
-              </DeleteButton> */}
               <DeleteButton
                 aria-label="delete"
                 onClick={() => {
