@@ -36,7 +36,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [GitHub](https://github.com/mseidel819/comments-section-redux)
-<!-- - Live Site URL: [Netlify](https://your-live-site-url.com) -->
+- Live Site URL: [Netlify](https://tranquil-capybara-a9a135.netlify.app/)
 
 ## My process
 

@@ -96,13 +96,14 @@ const addComment = (comments, commentId, content, user) => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
-  const day = date.getDay();
+  const day = date.getDate();
   const hour = date.getHours();
   const minute = date.getMinutes();
+  const formattedMin = minute < 10 ? "0" + minute : minute;
 
   const newComment = {
     content: content,
-    createdAt: `${month}/${day}/${year} at ${hour}:${minute}`,
+    createdAt: `${month + 1}/${day}/${year} at ${hour}:${formattedMin}`,
     id: commentId,
     replies: [],
     score: 0,
@@ -120,13 +121,14 @@ const addReply = (comments, commentId, content, user, currentUser) => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
-  const day = date.getDay();
+  const day = date.getDate();
   const hour = date.getHours();
   const minute = date.getMinutes();
+  const formattedMin = minute < 10 ? "0" + minute : minute;
 
   const newComment = {
     content: content,
-    createdAt: `${month}/${day}/${year} at ${hour}:${minute}`,
+    createdAt: `${month + 1}/${day}/${year} at ${hour}:${formattedMin}`,
     id: commentId,
     replyingTo: user.user.username,
     score: 0,
