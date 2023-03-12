@@ -22,7 +22,7 @@ import { ReactComponent as Minus } from "../../images/icon-minus.svg";
 import { ReactComponent as Reply } from "../../images/icon-reply.svg";
 import { ReactComponent as Delete } from "../../images/icon-delete.svg";
 import { ReactComponent as EditIcon } from "../../images/icon-edit.svg";
-import { User, Comment } from "../../types";
+import { Comment } from "../../types";
 
 type UpvoterProps = {
   user: Comment;
