@@ -38,6 +38,7 @@ const UpvoterMain = ({ user, mainOrSub }: UpvoterMainProps) => {
     >
       <UpvoteCard>
         <StyledIconButton
+          aria-label="upvote"
           onClick={
             mainOrSub === "main"
               ? increaseScoreHandler
@@ -49,6 +50,7 @@ const UpvoterMain = ({ user, mainOrSub }: UpvoterMainProps) => {
         </StyledIconButton>
         <h3>{user.score}</h3>
         <StyledIconButton
+          aria-label="downvote"
           onClick={
             mainOrSub === "main"
               ? decreaseScoreHandler
