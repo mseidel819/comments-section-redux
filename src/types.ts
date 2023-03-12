@@ -15,11 +15,3 @@ export type Comment = {
   replyingTo?: string;
   user: User;
 };
-
-// export type ReplyType = User & {
-//   id: number;
-//   content: string;
-//   createdAt: string;
-//   score: number;
-//   replyingTo: string;
-// };

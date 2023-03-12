@@ -10,10 +10,6 @@ import {
 import { ReactComponent as ReplyIcon } from "../../images/icon-reply.svg";
 import { ReactComponent as EditIcon } from "../../images/icon-edit.svg";
 import { ReactComponent as Delete } from "../../images/icon-delete.svg";
-// import juliusomo from "../../images/avatars/image-juliusomo.png";
-// import amyrobson from "../../images/avatars/image-amyrobson.png";
-// import maxblagun from "../../images/avatars/image-maxblagun.png";
-// import ramsesmiron from "../../images/avatars/image-ramsesmiron.png";
 import UpvoterMain from "../upvoter/upvoterMain.component";
 import UpvoterMobile from "../upvoter/upvoterMobile.component";
 import Reply from "../reply-card/reply-card.component";
@@ -56,14 +52,7 @@ const CommentCard = ({ user, mainOrSub, modalToggler }: CommentCardProps) => {
 
   const editToggler = () => setEditActive(!editActive);
 
-  // const userObj = {
-  //   juliusomo: require(user.user.image.png),
-  //   amyrobson: amyrobson,
-  //   maxblagun: maxblagun,
-  //   ramsesmiron: ramsesmiron,
-  // };
-  const userObj = user.user.image.png;
-  console.log(userObj);
+  const { png } = user.user.image;
 
   const editCommentHandler = () =>
     dispatch(commentEdited(comments, editField, user));
@@ -80,7 +69,7 @@ const CommentCard = ({ user, mainOrSub, modalToggler }: CommentCardProps) => {
             <Grid item container sm={11}>
               <Grid item container justifyContent="space-between">
                 <Grid item container alignItems="center" xs={12} sm={8.5}>
-                  <img src={user.user.image.png} alt={user.user.username} />
+                  <img src={png} alt={user.user.username} />
                   <UserSpan>{user.user.username}</UserSpan>
                   {user.user.username === currentUser.username && (
                     <YouSpan>you</YouSpan>

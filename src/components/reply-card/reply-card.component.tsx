@@ -44,12 +44,11 @@ const Reply = ({
 
   const addReplyHandler = () =>
     dispatch(addToReply(comments, commentId, textField, user, currentUser));
-
   return (
     <StyledReplyCard>
       <Grid container rowSpacing={2} columnSpacing={2}>
         <Grid item xs={0} sm={1} sx={{ display: { xs: "none", sm: "block" } }}>
-          <img src={currentUser.image.png} alt={currentUser.username} />
+          <img src={currentUser?.image.png} alt={currentUser?.username} />
         </Grid>
         <Grid item xs={12} sm={9}>
           <TextField
@@ -87,7 +86,7 @@ const Reply = ({
           sx={{ display: { xs: "flex", sm: "none" } }}
         >
           <Grid item xs={1}>
-            <img src={currentUser.image.png} alt={currentUser.username} />
+            <img src={currentUser?.image.png} alt={currentUser?.username} />
           </Grid>
           <Grid item container justifyContent="end" xs={6}>
             <SendButton

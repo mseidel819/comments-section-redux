@@ -31,3 +31,9 @@ export const store = createStore(
 );
 
 export const persistor = persistStore(store);
+
+export const resetStore = async () => {
+  await persistor.purge();
+  store.dispatch(resetStore());
+  await persistor.flush();
+};

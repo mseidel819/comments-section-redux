@@ -13,6 +13,7 @@ import { selectComments } from "./store/comments/comments.selector";
 import { setComments } from "./store/comments/comments.action";
 import React from "react";
 import { User, Comment } from "./types";
+// import { resetStore } from "./store/store";
 
 function App() {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ function App() {
   const removeCommentHandler = () =>
     dispatch(commentRemoved(comments, deleteId));
 
+  // resetStore();
   ///////////////////////////////////////////////
   /////JSX
   ////////////////////////////////////////////////
