@@ -1,5 +1,5 @@
 import { Grid, TextField } from "@mui/material";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
 import {
@@ -10,13 +10,10 @@ import {
 import { ReactComponent as ReplyIcon } from "../../images/icon-reply.svg";
 import { ReactComponent as EditIcon } from "../../images/icon-edit.svg";
 import { ReactComponent as Delete } from "../../images/icon-delete.svg";
-import juliusomo from "../../images/avatars/image-juliusomo.png";
-import amyrobson from "../../images/avatars/image-amyrobson.png";
-import maxblagun from "../../images/avatars/image-maxblagun.png";
-import ramsesmiron from "../../images/avatars/image-ramsesmiron.png";
 import UpvoterMain from "../upvoter/upvoterMain.component";
 import UpvoterMobile from "../upvoter/upvoterMobile.component";
 import Reply from "../reply-card/reply-card.component";
+import { Comment } from "../../types";
 
 import {
   StyledCommentCard,
@@ -31,7 +28,12 @@ import {
 } from "./comment-card.styles";
 import { selectComments } from "../../store/comments/comments.selector";
 
-const CommentCard = ({ user, mainOrSub, modalToggler }) => {
+type CommentCardProps = {
+  user: Comment;
+  mainOrSub: "main" | "sub";
+  modalToggler: (id?: number, replyingTo?: string) => void;
+};
+const CommentCard = ({ user, mainOrSub, modalToggler }: CommentCardProps) => {
   const [replyActive, setReplyActive] = useState(false);
   const [editActive, setEditActive] = useState(false);
   const [editField, setEditField] = useState(user.content);
@@ -40,26 +42,22 @@ const CommentCard = ({ user, mainOrSub, modalToggler }) => {
   const comments = useSelector(selectComments);
   const dispatch = useDispatch();
 
-  const editFieldHandler = (e) => {
-    const searchFieldString = e.target.value;
-    setEditField(searchFieldString);
+  const editFieldHandler = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setEditField(e.target.value);
   };
 
   const replyToggler = () => setReplyActive(!replyActive);
 
   const editToggler = () => setEditActive(!editActive);
 
-  const userObj = {
-    juliusomo: juliusomo,
-    amyrobson: amyrobson,
-    maxblagun: maxblagun,
-    ramsesmiron: ramsesmiron,
-  };
+  const { png } = user.user.image;
 
   const editCommentHandler = () =>
     dispatch(commentEdited(comments, editField, user));
   const editReplyHandler = () =>
-    dispatch(replyEdited(comments, editField, user, currentUser));
+    dispatch(replyEdited(comments, editField, user));
 
   return (
     <Grid container>
@@ -71,7 +69,7 @@ const CommentCard = ({ user, mainOrSub, modalToggler }) => {
             <Grid item container sm={11}>
               <Grid item container justifyContent="space-between">
                 <Grid item container alignItems="center" xs={12} sm={8.5}>
-                  <img src={userObj[user.user.username]} alt="user" />
+                  <img src={png} alt={user.user.username} />
                   <UserSpan>{user.user.username}</UserSpan>
                   {user.user.username === currentUser.username && (
                     <YouSpan>you</YouSpan>
@@ -162,7 +160,6 @@ const CommentCard = ({ user, mainOrSub, modalToggler }) => {
             <UpvoterMobile
               user={user}
               mainOrSub={mainOrSub}
-              currentUser={currentUser}
               replyToggler={replyToggler}
               editToggler={editToggler}
               modalToggler={modalToggler}
