@@ -12,14 +12,23 @@ import {
   selectComments,
 } from "../../store/comments/comments.selector";
 
-import julio from "../../images/avatars/image-juliusomo.png";
 import { SendButton, StyledReplyCard } from "./reply-card.styles";
+import { Comment } from "../../types";
 
 ///////////////////////////////////////////////////////////////////////////////////////
-const Reply = ({ user, sendReply, replyToggler }) => {
+type ReplyProps = {
+  user?: Comment | undefined;
+  sendReply: "Send" | "Reply";
+  replyToggler?: undefined | (() => void);
+};
+const Reply = ({
+  user = undefined,
+  sendReply,
+  replyToggler = undefined,
+}: ReplyProps) => {
   const [textField, setTextField] = useState("");
 
-  const textFieldHandler = (e) => {
+  const textFieldHandler = (e: { target: { value: any } }) => {
     const searchFieldString = e.target.value;
     setTextField(searchFieldString);
   };
@@ -40,7 +49,7 @@ const Reply = ({ user, sendReply, replyToggler }) => {
     <StyledReplyCard>
       <Grid container rowSpacing={2} columnSpacing={2}>
         <Grid item xs={0} sm={1} sx={{ display: { xs: "none", sm: "block" } }}>
-          <img src={julio} alt="current user" />
+          <img src={currentUser.image.png} alt={currentUser.username} />
         </Grid>
         <Grid item xs={12} sm={9}>
           <TextField
@@ -58,7 +67,7 @@ const Reply = ({ user, sendReply, replyToggler }) => {
             onClick={() => {
               if (sendReply === "Reply") {
                 addReplyHandler();
-                replyToggler();
+                if (replyToggler) replyToggler();
               } else {
                 addCommentHandler();
               }
@@ -78,7 +87,7 @@ const Reply = ({ user, sendReply, replyToggler }) => {
           sx={{ display: { xs: "flex", sm: "none" } }}
         >
           <Grid item xs={1}>
-            <img src={julio} alt="current user" />
+            <img src={currentUser.image.png} alt={currentUser.username} />
           </Grid>
           <Grid item container justifyContent="end" xs={6}>
             <SendButton
@@ -88,7 +97,7 @@ const Reply = ({ user, sendReply, replyToggler }) => {
                   addReplyHandler();
                   addIdHandler();
                   setTextField("");
-                  replyToggler();
+                  if (replyToggler) replyToggler();
                 } else {
                   addCommentHandler();
                   addIdHandler();

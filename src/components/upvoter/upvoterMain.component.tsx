@@ -9,8 +9,13 @@ import { selectComments } from "../../store/comments/comments.selector";
 import { UpvoteGrid, UpvoteCard, StyledIconButton } from "./upvoterMain.styles";
 import { ReactComponent as Plus } from "../../images/icon-plus.svg";
 import { ReactComponent as Minus } from "../../images/icon-minus.svg";
+import { Comment } from "../../types";
 
-const UpvoterMain = ({ user, mainOrSub }) => {
+type UpvoterMainProps = {
+  user: Comment;
+  mainOrSub: "main" | "sub";
+};
+const UpvoterMain = ({ user, mainOrSub }: UpvoterMainProps) => {
   const dispatch = useDispatch();
 
   const comments = useSelector(selectComments);

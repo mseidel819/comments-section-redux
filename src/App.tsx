@@ -1,4 +1,4 @@
-import JobData from "./data.json";
+import { jobData } from "./data";
 import { ModalBox, ModalCancelButton, ModalDeleteButton } from "./App.styles";
 import { Container, Grid, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -11,25 +11,30 @@ import { commentRemoved, replyRemoved } from "./store/comments/comments.action";
 
 import { selectComments } from "./store/comments/comments.selector";
 import { setComments } from "./store/comments/comments.action";
+import React from "react";
+import { User, Comment } from "./types";
 
 function App() {
   const dispatch = useDispatch();
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState(undefined);
+  const [deleteId, setDeleteId] = useState<number | undefined>(undefined);
   const [replyTo, setReplyTo] = useState("");
 
-  const modalToggler = (id, replyingTo) => {
+  const modalToggler = (
+    id: number | undefined = undefined,
+    replyingTo: string | undefined = undefined
+  ) => {
     setModalOpen(!modalOpen);
-    setDeleteId(id);
-    setReplyTo(replyingTo);
+    if (id) setDeleteId(id);
+    if (replyingTo) setReplyTo(replyingTo);
   };
   const comments = useSelector(selectComments);
 
   useEffect(() => {
-    dispatch(setCurrentUser(JobData.currentUser));
+    dispatch(setCurrentUser(jobData.currentUser));
     if (!comments) {
-      dispatch(setComments(JobData.comments));
+      dispatch(setComments(jobData.comments));
     }
   }, [dispatch, comments]);
 
@@ -45,17 +50,17 @@ function App() {
       <Container role="main" maxWidth="md" sx={{ marginTop: "64px" }}>
         {comments &&
           comments
-            .sort((a, b) => {
+            .sort((a: { score: number }, b: { score: number }) => {
               return b.score - a.score;
             })
-            .map((user) => (
+            .map((user: Comment) => (
               <div key={user.id}>
                 <CommentCard
                   user={user}
                   mainOrSub="main"
                   modalToggler={modalToggler}
                 />
-                {user.replies.length ? (
+                {user.replies?.length ? (
                   <Grid container>
                     <Grid
                       item
@@ -88,7 +93,7 @@ function App() {
       </Container>
       <Modal
         open={modalOpen}
-        onClose={modalToggler}
+        onClose={() => modalToggler()}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -103,7 +108,10 @@ function App() {
 
           <Grid container columnSpacing={2}>
             <Grid item container justifyContent="center" xs={6}>
-              <ModalCancelButton aria-label="cancel" onClick={modalToggler}>
+              <ModalCancelButton
+                aria-label="cancel"
+                onClick={() => modalToggler()}
+              >
                 No, cancel
               </ModalCancelButton>
             </Grid>
