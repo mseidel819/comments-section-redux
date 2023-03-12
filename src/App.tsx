@@ -11,8 +11,7 @@ import { commentRemoved, replyRemoved } from "./store/comments/comments.action";
 
 import { selectComments } from "./store/comments/comments.selector";
 import { setComments } from "./store/comments/comments.action";
-import React from "react";
-import { User, Comment } from "./types";
+import { Comment } from "./types";
 // import { resetStore } from "./store/store";
 
 function App() {
