@@ -1,5 +1,5 @@
 import { COMMENTS_ACTION_TYPES } from "./comments.types";
-import { createAction } from "../../utils/reducer.utils";
+import { createAction } from "../../utils/reducer.utils.js";
 
 //////////////////////////////////////////////////////////////////////////////////
 const addCommentIdSetter = (commentId) => {
