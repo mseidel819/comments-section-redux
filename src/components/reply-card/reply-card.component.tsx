@@ -42,8 +42,11 @@ const Reply = ({
   const addCommentHandler = () =>
     dispatch(addToComments(comments, commentId, textField, currentUser));
 
-  const addReplyHandler = () =>
-    dispatch(addToReply(comments, commentId, textField, user, currentUser));
+  const addReplyHandler = () => {
+    if (user)
+      dispatch(addToReply(comments, commentId, textField, user, currentUser));
+  };
+
   return (
     <StyledReplyCard>
       <Grid container rowSpacing={2} columnSpacing={2}>
