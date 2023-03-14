@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
+import { RootState } from "../store";
 
-const selectCommentsReducer = (state) => state.comments;
+const selectCommentsReducer = (state: RootState) => state.comments;
 
 export const selectCommentId = createSelector(
   [selectCommentsReducer],

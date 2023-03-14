@@ -1,3 +1,4 @@
+import { AnyAction } from "redux";
 import { COMMENTS_ACTION_TYPES } from "./comments.types";
 
 const INITIAL_STATE = {
@@ -5,7 +6,7 @@ const INITIAL_STATE = {
   commentsId: 5,
 };
 
-export const commentsReducer = (state = INITIAL_STATE, action) => {
+export const commentsReducer = (state = INITIAL_STATE, action: AnyAction) => {
   const { type, payload } = action;
 
   switch (type) {
