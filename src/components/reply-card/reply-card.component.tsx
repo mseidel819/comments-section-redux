@@ -21,6 +21,7 @@ type ReplyProps = {
   sendReply: "Send" | "Reply";
   replyToggler?: undefined | (() => void);
 };
+
 const Reply = ({
   user = undefined,
   sendReply,
@@ -28,23 +29,37 @@ const Reply = ({
 }: ReplyProps) => {
   const [textField, setTextField] = useState("");
 
-  const textFieldHandler = (e: { target: { value: any } }) => {
+  const textFieldHandler = (e: { target: { value: string } }) => {
     const searchFieldString = e.target.value;
     setTextField(searchFieldString);
   };
 
   const dispatch = useDispatch();
   const { currentUser } = useSelector(selectCurrentUser);
-  const comments = useSelector(selectComments);
-  const commentId = useSelector(selectCommentId);
+
+  const comments: Comment[] = useSelector(selectComments);
+  const commentId: number = useSelector(selectCommentId);
 
   const addIdHandler = () => dispatch(addOneToId(commentId));
+
   const addCommentHandler = () =>
     dispatch(addToComments(comments, commentId, textField, currentUser));
 
   const addReplyHandler = () => {
     if (user)
       dispatch(addToReply(comments, commentId, textField, user, currentUser));
+  };
+
+  const sendHandler = () => {
+    if (sendReply === "Reply") {
+      addReplyHandler();
+      if (replyToggler) replyToggler();
+    } else {
+      addCommentHandler();
+    }
+
+    addIdHandler();
+    setTextField("");
   };
 
   return (
@@ -64,19 +79,7 @@ const Reply = ({
           />
         </Grid>
         <Grid item xs={0} sm={2} sx={{ display: { xs: "none", sm: "block" } }}>
-          <SendButton
-            aria-label="send"
-            onClick={() => {
-              if (sendReply === "Reply") {
-                addReplyHandler();
-                if (replyToggler) replyToggler();
-              } else {
-                addCommentHandler();
-              }
-              addIdHandler();
-              setTextField("");
-            }}
-          >
+          <SendButton aria-label="send" onClick={sendHandler}>
             {sendReply}
           </SendButton>
         </Grid>
@@ -92,21 +95,7 @@ const Reply = ({
             <img src={currentUser?.image.png} alt={currentUser?.username} />
           </Grid>
           <Grid item container justifyContent="end" xs={6}>
-            <SendButton
-              aria-label="send"
-              onClick={() => {
-                if (sendReply === "Reply") {
-                  addReplyHandler();
-                  addIdHandler();
-                  setTextField("");
-                  if (replyToggler) replyToggler();
-                } else {
-                  addCommentHandler();
-                  addIdHandler();
-                  setTextField("");
-                }
-              }}
-            >
+            <SendButton aria-label="send" onClick={sendHandler}>
               {sendReply}
             </SendButton>
           </Grid>

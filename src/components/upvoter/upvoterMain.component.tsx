@@ -22,10 +22,13 @@ const UpvoterMain = ({ user, mainOrSub }: UpvoterMainProps) => {
 
   const increaseScoreHandler = () =>
     dispatch(scoreIncreased(comments, user.id));
+
   const decreaseScoreHandler = () =>
     dispatch(scoreDecreased(comments, user.id));
+
   const increaseScoreReplyHandler = () =>
     dispatch(scoreIncreasedReply(comments, user.id));
+
   const decreaseScoreReplyHandler = () =>
     dispatch(scoreDecreasedReply(comments, user.id));
 

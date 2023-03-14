@@ -1,5 +1,5 @@
 import { Grid, TextField } from "@mui/material";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../store/currentUser/currentUser.selector";
 import {
@@ -42,9 +42,7 @@ const CommentCard = ({ user, mainOrSub, modalToggler }: CommentCardProps) => {
   const comments = useSelector(selectComments);
   const dispatch = useDispatch();
 
-  const editFieldHandler = (e: {
-    target: { value: SetStateAction<string> };
-  }) => {
+  const editFieldHandler = (e: { target: { value: string } }) => {
     setEditField(e.target.value);
   };
 
@@ -56,8 +54,21 @@ const CommentCard = ({ user, mainOrSub, modalToggler }: CommentCardProps) => {
 
   const editCommentHandler = () =>
     dispatch(commentEdited(comments, editField, user));
+
   const editReplyHandler = () =>
     dispatch(replyEdited(comments, editField, user));
+
+  const modalHandler = () => {
+    if (mainOrSub === "main") modalToggler(user.id);
+    if (mainOrSub === "sub") modalToggler(user.id, user.replyingTo);
+  };
+
+  const editHandler = () => {
+    if (mainOrSub === "main") editCommentHandler();
+    if (mainOrSub === "sub") editReplyHandler();
+
+    editToggler();
+  };
 
   return (
     <Grid container>
@@ -88,11 +99,7 @@ const CommentCard = ({ user, mainOrSub, modalToggler }: CommentCardProps) => {
                     <>
                       <Grid item sm={6}>
                         <DeleteButton
-                          onClick={() => {
-                            if (mainOrSub === "main") modalToggler(user.id);
-                            if (mainOrSub === "sub")
-                              modalToggler(user.id, user.replyingTo);
-                          }}
+                          onClick={modalHandler}
                           variant="text"
                           startIcon={<Delete />}
                         >
@@ -132,19 +139,7 @@ const CommentCard = ({ user, mainOrSub, modalToggler }: CommentCardProps) => {
                     onChange={editFieldHandler}
                     defaultValue={user.content}
                   />
-                  <SendButton
-                    aria-label="update"
-                    onClick={() => {
-                      if (mainOrSub === "main") {
-                        editCommentHandler();
-                        editToggler();
-                      }
-                      if (mainOrSub === "sub") {
-                        editReplyHandler();
-                        editToggler();
-                      }
-                    }}
-                  >
+                  <SendButton aria-label="update" onClick={editHandler}>
                     Update
                   </SendButton>
                 </Grid>
