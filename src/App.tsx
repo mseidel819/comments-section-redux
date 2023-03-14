@@ -27,7 +27,9 @@ function App() {
   ) => {
     setModalOpen(!modalOpen);
     if (id) setDeleteId(id);
-    if (replyingTo) setReplyTo(replyingTo);
+    if (replyingTo) {
+      setReplyTo(replyingTo);
+    } else setReplyTo("");
   };
   const comments = useSelector(selectComments);
 
@@ -41,7 +43,6 @@ function App() {
   const removeReplyHandler = () => dispatch(replyRemoved(comments, deleteId));
   const removeCommentHandler = () =>
     dispatch(commentRemoved(comments, deleteId));
-
   // resetStore();
   ///////////////////////////////////////////////
   /////JSX

@@ -184,12 +184,13 @@ const removeReply = (comments, replyId) => {
   let targetComment = comments.find((comment) =>
     comment.replies.find((reply) => reply.id === replyId)
   );
-
-  targetComment = {
-    ...targetComment,
-    replies: targetComment.replies.filter((reply) => reply.id !== replyId),
-  };
-
+  if (targetComment && targetComment.replies) {
+    targetComment = {
+      ...targetComment,
+      replies: targetComment.replies.filter((reply) => reply.id !== replyId),
+    };
+  }
+  console.log(targetComment.id);
   return [
     ...comments.filter((comment) => comment.id !== targetComment.id),
     targetComment,

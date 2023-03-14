@@ -89,7 +89,9 @@ const CommentCard = ({ user, mainOrSub, modalToggler }: CommentCardProps) => {
                       <Grid item sm={6}>
                         <DeleteButton
                           onClick={() => {
-                            modalToggler(user.id, user.replyingTo);
+                            if (mainOrSub === "main") modalToggler(user.id);
+                            if (mainOrSub === "sub")
+                              modalToggler(user.id, user.replyingTo);
                           }}
                           variant="text"
                           startIcon={<Delete />}
