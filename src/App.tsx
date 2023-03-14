@@ -1,6 +1,6 @@
 import { jobData } from "./data";
 import { ModalBox, ModalCancelButton, ModalDeleteButton } from "./App.styles";
-import { Container, Grid, Modal, Button } from "@mui/material";
+import { Container, Grid, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
