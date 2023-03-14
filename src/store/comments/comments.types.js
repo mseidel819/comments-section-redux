@@ -1,4 +1,0 @@
-export const COMMENTS_ACTION_TYPES = {
-  SET_COMMENTS: "comments/SET_COMMENTS",
-  SET_COMMENTS_ID: "comments/SET_COMMENTS_ID",
-};

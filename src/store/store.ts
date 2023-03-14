@@ -42,6 +42,7 @@ export const persistor = persistStore(store);
 
 export const resetStore = async () => {
   await persistor.purge();
+  // @ts-ignore
   store.dispatch(resetStore());
   await persistor.flush();
 };
