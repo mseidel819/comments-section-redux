@@ -12,7 +12,7 @@ import { commentRemoved, replyRemoved } from "./store/comments/comments.action";
 import { selectComments } from "./store/comments/comments.selector";
 import { setComments } from "./store/comments/comments.action";
 import { Comment } from "./types";
-import { resetStore } from "./store/store";
+// import { resetStore } from "./store/store";
 
 function App() {
   const dispatch = useDispatch();
@@ -53,7 +53,6 @@ function App() {
   ////////////////////////////////////////////////
   return (
     <>
-      <Button onClick={() => resetStore()}>Reset Store</Button>
       <Container role="main" maxWidth="md" sx={{ marginTop: "64px" }}>
         {comments &&
           comments
